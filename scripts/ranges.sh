@@ -22,11 +22,15 @@ _pids="${_pids} $!"
 wait ${_pids}
 
 while read -r _rng; do
+    if [ ! -s "${_rng}.json" ]; then
+        echo "${_rng}.json is empty, check this error please!"
+        exit 3
+    fi
     if ! git diff --quiet "${_rng}.json"; then
         _data="$(printf "{\"branch\": \"master\", \"author_email\": \"yom@iaelu.net\", \"author_name\": \"Guillaume Bibaut\", \"content\": \"%s\", \"commit_message\": \"%s changes\"}" "$(tr '\n' '@' < "${_rng}.json" | sed -e s/@/\\\\n/g -e s/\"/\\\\\"/g)" "${_rng}")"
         _url="$(printf "https://gitlab.com/api/v4/projects/%s/repository/files/%s%%2Ejson" "${_PROJECT}" "${_rng}")"
 
-        curl --request PUT \
+        curl -sS --request PUT \
             --header "PRIVATE-TOKEN: ${_TOKEN}" \
             --header "Content-Type: application/json" \
             --data "${_data}" \

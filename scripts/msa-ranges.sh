@@ -5,6 +5,7 @@ _INITIALURL="https://www.microsoft.com/EN-US/DOWNLOAD/confirmation.aspx?id=41653
 _DATE=$(curl -sSL "${_INITIALURL}" | grep "PublicIPs_" | tail -n1 | sed -E "s:^.*018E208D-54F8-44CD-AA26-CD7BC9524A8C/PublicIPs_(.*)\.xml.*$:\1:")
 
 _sep=""
+echo "[$(basename "$0")] Fetching Microsoft Azure Cloud IPv4 ranges..."
 printf "[" > msazure.json
 while read -r _range; do
     _rng=$(printf "%s" "${_range}" | sed -E 's:^.*Subnet="(.*)".*$:\1:')
@@ -17,5 +18,6 @@ done <<DONE
 $(curl -sSL "${_FIRSTLONGPART}${_DATE}.xml" | grep IpRange)
 DONE
 printf "\n]" >> msazure.json
+echo "[$(basename "$0")] Fetched Microsoft Azure Cloud IPv4 ranges."
 
 exit 0

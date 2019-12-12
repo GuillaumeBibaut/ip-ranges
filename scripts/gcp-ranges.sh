@@ -29,8 +29,10 @@ recursenb() {
     done
 }
 
+echo "[$(basename "$0")] Fetching Google Cloud Plateform IPv4 ranges..."
 printf "[" > googlecloud.json
 recursenb "${_netblocks}"
 printf "\n]" >> googlecloud.json
+echo "[$(basename "$0")] Fetched Google Cloud Plateform IPv4 ranges."
 
 exit 0
