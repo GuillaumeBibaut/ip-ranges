@@ -19,5 +19,6 @@ $(curl -sSL "${_FIRSTLONGPART}${_DATE}.xml" | grep IpRange)
 DONE
 printf "\n]" >> msazure.json
 echo "[$(basename "$0")] Fetched Microsoft Azure Cloud IPv4 ranges."
+echo "[$(basename "$0")] Lines count: $(wc -l < msazure.json)"
 
 exit 0

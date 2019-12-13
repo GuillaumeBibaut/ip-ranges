@@ -14,5 +14,6 @@ $(${CURLCMD} -sSL ${_RANGES_URL} | sed -E -e 's:;.*::' | grep -v '^ *$')
 DONE
 printf "\n]" >> spamhausedrop.json
 echo "[$(basename "$0")] Fetched SpamHaus EDROP IPv4 ranges."
+echo "[$(basename "$0")] Lines count: $(wc -l < spamhausedrop.json)"
 
 exit 0

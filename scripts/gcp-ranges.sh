@@ -34,5 +34,6 @@ printf "[" > googlecloud.json
 recursenb "${_netblocks}"
 printf "\n]" >> googlecloud.json
 echo "[$(basename "$0")] Fetched Google Cloud Plateform IPv4 ranges."
+echo "[$(basename "$0")] Lines count: $(wc -l < googlecloud.json)"
 
 exit 0

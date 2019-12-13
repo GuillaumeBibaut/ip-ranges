@@ -15,5 +15,6 @@ $(${CURLCMD} -sSL ${_RANGES_URL} | grep ip_prefix)
 DONE
 printf "\n]" >> amazonaws.json
 echo "[$(basename "$0")] Fetched Amazon AWS IPv4 ranges."
+echo "[$(basename "$0")] Lines count: $(wc -l < amazonaws.json)"
 
 exit 0
