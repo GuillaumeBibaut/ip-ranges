@@ -4,6 +4,6 @@ update:
   before_script:
     - apk add --no-cache git curl bind-tools
   script:
-    - /bin/sh ./scripts/test-diff.sh $API_TOKEN $CI_PROJECT_ID
+    - /bin/sh ./scripts/ranges.sh $API_TOKEN $CI_PROJECT_ID
   only:
     - schedules
