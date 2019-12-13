@@ -1,6 +1,6 @@
 #!/bin/sh
 
-_RANGES_URL="https://www.spamhaus.org/drop/drop.lasso"
+_RANGES_URL="https://www.spamhaus.org/drop/drop.txt"
 CURLCMD="curl"
 
 _sep=""
