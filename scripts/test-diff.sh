@@ -19,7 +19,9 @@ while read -r _rng; do
         exit 3
     fi
     if ! git diff --quiet "${_rng}.json"; then
-        echo "${_rng} changes"
+        printf "%s changes, cleaning local changes..." "${_rng}"
+        git restore "${_rng}.json"
+        printf " done!\n"
     fi
 done <<EOD
 amazonaws
