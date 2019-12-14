@@ -8,6 +8,7 @@ fi
 _TOKEN="$1"
 _PROJECT="$2"
 
+echo "$(date)"
 echo "Waiting for ranges..."
 
 _pids=""
