@@ -30,7 +30,9 @@ for _rng in amazonaws googlecloud msazure spamhausdrop spamhausedrop; do
         echo "${_rng}.json is empty, check this error please!"
         exit 3
     fi
-    if ! git diff --quiet "${_rng}.json"; then
+    if git diff "${_rng}.json"; then
+        echo "${_rng} no changes"
+    else
         _data="$(printf "{\"branch\": \"master\", \"author_email\": \"yom@iaelu.net\", \"author_name\": \"Guillaume Bibaut\", \"content\": \"%s\", \"commit_message\": \"%s changes\"}" "$(tr '\n' '@' < "${_rng}.json" | sed -e s/@/\\\\n/g -e s/\"/\\\\\"/g)" "${_rng}")"
         _url="$(printf "https://gitlab.com/api/v4/projects/%s/repository/files/%s%%2Ejson" "${_PROJECT}" "${_rng}")"
 
