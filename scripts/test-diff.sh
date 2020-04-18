@@ -22,7 +22,7 @@ for _rng in amazonaws googlecloud msazure spamhausdrop spamhausedrop; do
         exit 3
     fi
     if ! git diff --quiet "${_rng}.json"; then
-        git diff "${_rng}.json"
+        git diff --exit-code "${_rng}.json"
         printf "%s changes, cleaning local changes..." "${_rng}"
         git restore "${_rng}.json"
         printf " done!\n"
