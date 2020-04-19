@@ -46,6 +46,7 @@ for _rng in amazonaws googlecloud msazure spamhausdrop spamhausedrop; do
             echo "${_rng} curl command failed"
             exit 2
         fi
+        echo
     fi
 done
 
