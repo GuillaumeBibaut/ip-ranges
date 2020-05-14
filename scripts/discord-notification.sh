@@ -1,10 +1,10 @@
 #!/bin/bash
 
 if [ -z "$2" ]; then
-  echo -e "WARNING!!\nWEBHOOK_URL environment variable empty" && exit
+  echo "WARNING!! WEBHOOK_URL environment variable empty" && exit
 fi
 
-echo -e "[Webhook]: Sending webhook to Discord...\\n";
+echo "[Webhook]: Sending webhook to Discord...";
 
 case $1 in
   "push" )
@@ -20,7 +20,7 @@ esac
 
 COMMITTER_NAME="$(git log -1 "$CI_COMMIT_SHA" --pretty="%cN")"
 COMMIT_SUBJECT="$(git log -1 "$CI_COMMIT_SHA" --pretty="%s")"
-COMMIT_MESSAGE="$(git log -1 "$CI_COMMIT_SHA" --pretty="%b")" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g'
+COMMIT_MESSAGE="$(git log -1 "$CI_COMMIT_SHA" --pretty="%s")"
 
 
 TIMESTAMP=$(date --utc +%FT%TZ)
@@ -53,5 +53,5 @@ WEBHOOK_DATA='{
   } ]
 }'
 
-(curl --fail --progress-bar -A "GitLabCI-Webhook" -H Content-Type:application/json -H X-Author:y0m#7248 -d "$WEBHOOK_DATA" "$2" \
-  && echo -e "\\n[Webhook]: Successfully sent the webhook.") || echo -e "\\n[Webhook]: Unable to send webhook."
+(curl --fail --progress-bar -A "GitLabCI-Webhook" -H "Content-Type:application/json" -H "X-Author:y0m#7248" -d "$WEBHOOK_DATA" "$2" \
+  && echo "[Webhook]: Successfully sent the webhook.") || echo "[Webhook]: Unable to send webhook."
