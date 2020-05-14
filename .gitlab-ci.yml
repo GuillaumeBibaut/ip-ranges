@@ -1,6 +1,6 @@
 pushes:
   script:
-    - /bin/sh ./scripts/discord-notification.sh push $WEBHOOK_URL
+    - /bin/sh ./scripts/discord-notification.sh "$WEBHOOK_URL"
   only:
     - pushes
 
