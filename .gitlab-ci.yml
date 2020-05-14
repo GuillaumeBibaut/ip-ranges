@@ -1,3 +1,12 @@
+stages:
+  - update
+  - pushes
+
+pushes:
+  script:
+    - /bin/sh ./scripts/discord-notification.sh push $WEBHOOK_URL
+  only:
+    - pushes
 
 update:
   image: alpine:edge
