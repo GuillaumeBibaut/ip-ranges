@@ -5,7 +5,7 @@ pushes:
     - pushes
 
 update:
-  image: alpine:edge
+  image: alpine:latest
   before_script:
     - apk add --no-cache git curl bind-tools
   script:
