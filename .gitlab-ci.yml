@@ -7,8 +7,11 @@ pushes:
 update:
   image: alpine:latest
   before_script:
-    - apk add --no-cache git curl bind-tools
+    - apk add --no-cache git openssh-client curl bind-tools
+    - install -m 0700 -d ~/.ssh
+    - ssh-keyscan ${CI_SERVER_HOST} 1>~/.ssh/known_hosts
+    - eval $(ssh-agent -s)
   script:
-    - /bin/sh ./scripts/ranges.sh $API_TOKEN $CI_PROJECT_ID
+    - /bin/sh ./scripts/ranges.sh
   only:
     - schedules

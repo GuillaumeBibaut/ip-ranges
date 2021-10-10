@@ -1,12 +1,16 @@
 #!/bin/sh
 
-if [ $# -ne 2 ]; then
-    echo "$(basename "$0") TOKEN PROJECT"
-    exit 1
-fi
+GITCMD="/usr/bin/git"
+_TEMPDIR="/builds/${CI_PROJECT_PATH}/clone"
 
-_TOKEN="$1"
-_PROJECT="$2"
+trap 'rm -rf "${_TEMPDIR}"; exit 1' 2
+
+mkdir -p "${_TEMPDIR}"
+${GITCMD} clone "https://${GITLAB_USERNAME}:${GITLAB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git" "${_TEMPDIR}"
+${GITCMD} config --global user.email "${GIT_USER_EMAIL:-$GITLAB_USER_EMAIL}"
+${GITCMD} config --global user.name "${GIT_USER_NAME:-$GITLAB_USER_NAME}"
+
+cd "${_TEMPDIR}"
 
 echo "$(date)"
 echo "Waiting for ranges..."
@@ -28,28 +32,24 @@ echo "Checking for diffs..."
 for _rng in amazonaws googlecloud msazure spamhausdrop spamhausedrop; do
     if [ ! -s "${_rng}.json" ]; then
         echo "${_rng}.json is empty, check this error please!"
+        rm -rf "${_TEMPDIR}"
         exit 3
     fi
     if git diff --exit-code "${_rng}.json"; then
         echo "${_rng} no changes"
     else
-        _data="$(printf "{\"branch\": \"master\", \"author_email\": \"yom@iaelu.net\", \"author_name\": \"Guillaume Bibaut\", \"encoding\": \"base64\", \"commit_message\": \"%s changes\"}" "${_rng}")"
-        _base64="$(base64 -w0 "${_rng}.json")"
-        _url="$(printf "https://gitlab.com/api/v4/projects/%s/repository/files/%s%%2Ejson" "${_PROJECT}" "${_rng}")"
-
-        curl -sS --request PUT \
-            --header "PRIVATE-TOKEN: ${_TOKEN}" \
-            --header "Content-Type: application/json" \
-            --data "${_data}" \
-            --data-urlencode "${_base64}" \
-            "${_url}"
+        git add "${_rng}.json"
+        git commit -m "${_rng} changes"
+        git push origin "${CI_DEFAULT_BRANCH}"
         _ret=$?
         if [ ${_ret} -ne 0 ]; then
-            echo "${_rng} curl command failed"
+            echo "${_rng} git push command failed"
+            rm -rf "${_TEMPDIR}"
             exit 2
         fi
         echo
     fi
 done
 
+rm -rf "${_TEMPDIR}"
 exit 0
