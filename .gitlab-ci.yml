@@ -1,10 +1,13 @@
 pushes:
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache git curl
   script:
     - /bin/sh ./scripts/discord-notification.sh "$WEBHOOK_URL"
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "push"'
       changes: 
-        - ./*.json
+        - '*.json'
 
 update:
   image: alpine:latest
